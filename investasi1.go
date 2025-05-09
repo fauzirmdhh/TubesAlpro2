@@ -35,7 +35,7 @@ func tambahInvestasi(nama string, jumlah int) {
 		return
 	}
 
-	daftarInvestasi = append(daftarInvestasi, Investasi{Nama: nama, Harga: harga, Jumlah: jumlah})
+	daftarInvestasi = append(daftarInvestasi, Investasi{Nama: nama, Harga: harga, Jumlah: jumlah}) // append digunakan untuk menanbahkan elemen baru dalam list
 	fmt.Println("✅ Investasi berhasil ditambahkan!")
 }
 
