@@ -2,6 +2,7 @@ package main
 import "fmt"
 
 const NMAX int = 50
+const MAXbuy int = 10
 
 type investasi struct {
 	Nama string
@@ -27,6 +28,9 @@ type cari struct {
 	Jumlah float64
 	Kategori string
 }
+
+var pembelianSaya [MAXbuy]investasi
+var jumlahPembelian int
 
 func main(){
 	
@@ -235,24 +239,32 @@ func Buy(inv [NMAX]investasi, target cari, kode string) ([10]investasi, int) { /
 func totalBuy(inv [NMAX]investasi, done [1]investasi) *investasi{ //proses I.II
 	var akanBeli investasi
 	var D selfData
-	var kode string
 	var totalBeli float64
 	var i int = 0
-	if done[i] != nil {
+	if done[i].Nama != "" {
 		akanBeli.Harga = done[i].Harga / done[i].Jumlah
 		fmt.Printf("Sejumlah%9s ", ":")
 		fmt.Scan(&akanBeli.Jumlah)
 		if akanBeli.Jumlah <= done[i].Jumlah {
 			totalBeli = akanBeli.Harga * akanBeli.Jumlah
 			fmt.Printf("Totalnya%9s %d\n", ":", totalBeli)
-			D.deposit = D.deposit - totalBeli
-			fmt.Printf("Sisa saldo%5s %d\n", ":", D.deposit)
+			
+			if jumlahPembelian < MAXbuy {
+				D.deposit = D.deposit - totalBeli
+				fmt.Printf("Sisa saldo%5s %d\n", ":", D.deposit)
+				akanBeli.Harga = totalBeli
+				akanBeli.Nama = done[i].Nama
+				akanBeli.Kategori = done[i].Kategori
+				pembelianSaya[jumlahPembelian] = akanBeli
+				fmt.Printf("Investasi saya%1s\n", ":")
+				jumlahPembelian++
+				return &akanBeli
+			} 
 		}
-		akanBeli.Harga = totalBeli
-		fmt.Printf("Investasi saya%1s\n", ":")
 	} else {
 		return nil
 	}
+	return nil
 }
 
 //sell program===============================================================
