@@ -269,16 +269,32 @@ func totalBuy(inv [NMAX]investasi, done [1]investasi) *investasi{ //proses I.II
 
 //sell program===============================================================
 
-func investasiSaya(){ //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<(PERLU DI SELESAIKAN)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	var myInvest investasi
-	myInvest = totalBuy()
-	if myInvest == nil {
+func investasiSaya(){ // optionn II
+	var i int
+	var aset investasi
+	
+	if jumlahPembelian == 0 {
+		fmt.Println("-----------------------------------------------------")
 		fmt.Println("Anda belum memiliki aset investasi")
 		fmt.Println("Silahkan lakukan pembelian dulu")
+		fmt.Println("-----------------------------------------------------")
 		menu()
-	} else if myInvest != nil {
-		
+		return
+	} else {
+		fmt.Println("-----------------------------------------------------")
+		fmt.Printf("%14s\n", "Daftar Aset investasi Saya")
+		fmt.Println("-----------------------------------------------------")
+		for i = 0; i < jumlahPembelian; i++ {
+			aset = pembelianSaya[i]
+			fmt.Println("+---------------------------------------------------+")
+			fmt.Printf("%d.%2s Aset%10s %s\n", i+1, "|", ":", aset.Nama)
+			fmt.Printf("%4s Kategori%6s %s\n", "|", ":", aset.Kategori)
+			fmt.Printf("%4s Jumlah%8s %s\n", "|", ":", aset.Jumlah)
+			fmt.Printf("%4s Total Harga%3s %s\n", "|", ":", aset.Harga)
+		}
+		fmt.Println("-----------------------------------------------------")
 	}
+	
 }
 
 func pilihSell(){
