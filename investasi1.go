@@ -5,122 +5,247 @@ import (
 	"strings"
 )
 
-const NMAX int = 1024
+const NMAX int = 20
 
-const (
-	hargaEmas      = 2000000 // Harga per gram emas
-	hargaSaham     = 500000  // Harga per unit saham
-	hargaReksaDana = 150000  // Harga per unit reksa dana
-)
+var akun Akun
+var daftarInvestasi [NMAX]Investasi
+var nData = 0
+var isLoggedIn bool = false
+var idCounter int = 100
+
+type Akun struct {
+	Username string
+	Password string
+}
 
 type Investasi struct {
+	ID     int
 	Nama   string
-	Harga  float64
-	Jumlah int
-}
-
-var daftarInvestasi []Investasi
-
-func tambahInvestasi(nama string, jumlah int) {
-	var harga float64
-	switch strings.ToLower(nama) { // Menggunakan ini karena setiap inputan pengguna akan menjadi kecil jadi tidak akan ada bias
-	case "emas":
-		harga = hargaEmas
-	case "saham":
-		harga = hargaSaham
-	case "reksa dana":
-		harga = hargaReksaDana
-	default:
-		fmt.Println("🚫 Jenis investasi tidak dikenal.")
-		return
-	}
-
-	daftarInvestasi = append(daftarInvestasi, Investasi{Nama: nama, Harga: harga, Jumlah: jumlah}) // append digunakan untuk menanbahkan elemen baru dalam list
-	fmt.Println("✅ Investasi berhasil ditambahkan!")
-}
-
-func cetakData() {
-	if len(daftarInvestasi) == 0 {
-		fmt.Println("📭  Tidak ada data investasi.")
-		return
-	}
-	fmt.Println("\n📁  Daftar Investasi Saat Ini:")
-	fmt.Println("------------------------------------------------")
-	fmt.Printf("%-15s %-10s %-10s\n", "📌 Nama", "💰 Harga", "📦 Jumlah")
-	fmt.Println("------------------------------------------------")
-	for i := 0; i < len(daftarInvestasi); i++ {
-		inv := daftarInvestasi[i]
-		fmt.Printf("%-15s %-10.2f %-10d\n", inv.Nama, inv.Harga, inv.Jumlah)
-	}
-	fmt.Println("------------------------------------------------")
-}
-
-func linearSearch(nama string) int {
-	for i := 0; i < len(daftarInvestasi); i++ {
-		inv := daftarInvestasi[i]
-		if strings.ToLower(inv.Nama) == strings.ToLower(nama) {
-			return i
-		}
-	}
-	return -1
-}
-
-func menu() {
-	var M int
-	var nama string
-
-	for {
-		fmt.Println("\n=========================================")
-		fmt.Println("📊  APLIKASI INVESTASI SEDERHANA")
-		fmt.Println("=========================================")
-		fmt.Println("1️⃣  Tambah Investasi")
-		fmt.Println("2️⃣  Tampilkan Semua Investasi")
-		fmt.Println("3️⃣  Jual / Tarik Investasi (❌ Hapus)")
-		fmt.Println("0️⃣  Keluar")
-		fmt.Println("-----------------------------------------")
-		fmt.Print("🧭  Pilih menu: ")
-
-		fmt.Scan(&M)
-
-		switch M {
-		case 1:
-			// Menu tambah investasi
-			fmt.Print("Masukkan nama investasi (Emas/Saham/Reksa Dana): ")
-			fmt.Scan(&nama)
-			nama = strings.TrimSpace(nama) // untuk menghilangkan spasi atau enter dalam inputan nama
-
-			fmt.Print("Masukkan jumlah investasi: ")
-			var jumlah int
-			fmt.Scan(&jumlah)
-
-			tambahInvestasi(nama, jumlah)
-		case 2:
-			// Tampilkan semua investasi
-			cetakData()
-		case 3:
-			// Jual atau tarik investasi
-			fmt.Print("Masukkan nama investasi yang ingin dijual/tarik: ")
-			fmt.Scan(&nama)
-			nama = strings.TrimSpace(nama)
-
-			index := linearSearch(nama)
-			if index != -1 {
-				// Hapus data investasi dari daftar
-				daftarInvestasi = append(daftarInvestasi[:index], daftarInvestasi[index+1:]...)
-				fmt.Println("✅ Investasi berhasil dihapus.")
-			} else {
-				fmt.Println("🚫 Investasi tidak ditemukan.")
-			}
-		case 0:
-			// Keluar dari program
-			fmt.Println("👋 Terima kasih telah menggunakan aplikasi ini!")
-			return
-		default:
-			fmt.Println("⚠️  Menu tidak valid. Coba lagi.")
-		}
-	}
+	Jumlah float64
+	Total  float64
 }
 
 func main() {
-	menu()
+	var pilihan int
+
+	for {
+		if !isLoggedIn {
+			tampilkanHeader("🟢 FinVest - Aplikasi Investasi Sederhana")
+			fmt.Println("1. Buat Akun")
+			fmt.Println("2. Login")
+			fmt.Println("3. Keluar")
+			fmt.Print(">> Pilihan Anda: ")
+			fmt.Scanln(&pilihan)
+
+			switch pilihan {
+			case 1:
+				buatAkun()
+			case 2:
+				login()
+			case 3:
+				fmt.Println("Terima kasih telah menggunakan FinVest!")
+				return
+			default:
+				fmt.Println("🚫 Pilihan tidak valid.\n")
+			}
+		} else {
+			menuUtama()
+		}
+	}
+}
+
+func buatAkun() {
+	fmt.Println("\n📌 Buat Akun Baru")
+	fmt.Print("🧑 Username: ")
+	fmt.Scanln(&akun.Username)
+	fmt.Print("🔒 Password: ")
+	fmt.Scanln(&akun.Password)
+	fmt.Println("✅ Akun berhasil dibuat!\n")
+}
+
+func login() {
+	var LoginUsn, LoginPass string
+
+	fmt.Println("\n🔐 Login")
+	fmt.Print("🧑 Username: ")
+	fmt.Scanln(&LoginUsn)
+	fmt.Print("🔒 Password: ")
+	fmt.Scanln(&LoginPass)
+
+	if LoginUsn == akun.Username && LoginPass == akun.Password {
+		isLoggedIn = true
+		fmt.Println("✅ Login berhasil!\n")
+	} else {
+		fmt.Println("🚫 Username atau password salah\n")
+	}
+}
+
+func tampilkanHeader(judul string) {
+	fmt.Println(strings.Repeat("=", len(judul)))
+	fmt.Println(judul)
+	fmt.Println(strings.Repeat("=", len(judul)))
+}
+
+func menuUtama() {
+	var pilihan int
+	tampilkanHeader("📊 FinVest - Menu Utama")
+	fmt.Println("1. ➕ Tambah Investasi")
+	fmt.Println("2. ➖ Jual/Tarik Investasi")
+	fmt.Println("3. 🔼 Urutkan Berdasarkan Harga (Ascending)")
+	fmt.Println("4. 🔤 Urutkan Berdasarkan ID (Ascending)")
+	fmt.Println("5. 📄 Lihat Daftar Investasi")
+	fmt.Println("6. 🚪 Logout")
+	fmt.Print(">> Pilihan Anda: ")
+	fmt.Scanln(&pilihan)
+
+	switch pilihan {
+	case 1:
+		tambahInvestasi()
+	case 2:
+		tarikInvestasi()
+	case 3:
+		sortByHarga()
+	case 4:
+		sortByID()
+	case 5:
+		tampilkanInvestasi()
+	case 6:
+		isLoggedIn = false
+		fmt.Println("🔓 Logout berhasil.\n")
+	default:
+		fmt.Println("🚫 Pilihan tidak valid.")
+	}
+}
+
+func sortByID() {
+	for i := 0; i < nData-1; i++ {
+		minIdx := i
+		for j := i + 1; j < nData; j++ {
+			if daftarInvestasi[j].ID < daftarInvestasi[minIdx].ID {
+				minIdx = j
+			}
+		}
+		daftarInvestasi[i], daftarInvestasi[minIdx] = daftarInvestasi[minIdx], daftarInvestasi[i]
+	}
+	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan ID (terkecil ke terbesar).")
+	tampilkanInvestasi()
+}
+
+func sortByHarga() {
+	for i := 0; i < nData-1; i++ {
+		minIdx := i
+		for j := i + 1; j < nData; j++ {
+			if daftarInvestasi[j].Total < daftarInvestasi[minIdx].Total {
+				minIdx = j
+			}
+		}
+		daftarInvestasi[i], daftarInvestasi[minIdx] = daftarInvestasi[minIdx], daftarInvestasi[i]
+	}
+	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan total harga (termurah ke termahal).")
+	tampilkanInvestasi() // langsung tampilkan hasil
+}
+
+func tambahInvestasi() {
+	if nData >= NMAX {
+		fmt.Println("🚫 Data investasi penuh!")
+		return
+	}
+
+	var pilihan int
+	var jumlah float64
+	var nama string
+	var hargaSatuan float64
+
+	fmt.Println("\n💼 Pilih Jenis Investasi:")
+	fmt.Println("1. Emas (Rp 2.000.000/gram)")
+	fmt.Println("2. Dolar (Rp 16.500/lembar)")
+	fmt.Println("3. Saham BBCA (Rp 900.000/lot)")
+	fmt.Println("4. Saham BMRI (Rp 477.000/lot)")
+	fmt.Println("5. Saham BBRI (Rp 384.000/lot)")
+	fmt.Println("6. Saham TLKM (Rp 260.000/lot)")
+	fmt.Print(">> Pilihan: ")
+	fmt.Scanln(&pilihan)
+
+	switch pilihan {
+	case 1:
+		nama = "Emas"
+		hargaSatuan = 2000000
+	case 2:
+		nama = "Dollar"
+		hargaSatuan = 16500
+	case 3:
+		nama = "BBCA"
+		hargaSatuan = 900000
+	case 4:
+		nama = "BMRI"
+		hargaSatuan = 477000
+	case 5:
+		nama = "BBRI"
+		hargaSatuan = 384000
+	case 6:
+		nama = "TLKM"
+		hargaSatuan = 260000
+	default:
+		fmt.Println("🚫 Pilihan tidak valid.")
+		return
+	}
+
+	fmt.Print("🔢 Masukkan jumlah (gram/lembar/lot): ")
+	fmt.Scanln(&jumlah)
+
+	daftarInvestasi[nData] = Investasi{
+		ID:     idCounter,
+		Nama:   nama,
+		Jumlah: jumlah,
+		Total:  jumlah * hargaSatuan,
+	}
+	idCounter++
+	nData++
+	fmt.Println("✅ Investasi berhasil ditambahkan!")
+}
+
+func tarikInvestasi() {
+	var id int
+	tampilkanInvestasi()
+	fmt.Print("\n🔻 Masukkan ID investasi yang ingin ditarik: ")
+	fmt.Scanln(&id)
+
+	// Inisialisasi index sebagai -1
+	index := -1
+	i := 0
+
+	for i < nData {
+		if daftarInvestasi[i].ID == id {
+			index = i
+			i = nData // langsung keluar dari loop dengan menyelesaikan kondisi
+		} else {
+			i++
+		}
+	}
+
+	if index != -1 {
+		// Geser elemen ke kiri untuk menghapus data pada index
+		for j := index; j < nData-1; j++ {
+			daftarInvestasi[j] = daftarInvestasi[j+1]
+		}
+		nData--
+		fmt.Println("✅ Investasi berhasil ditarik!\n")
+	} else {
+		fmt.Println("🚫 ID tidak ditemukan.\n")
+	}
+}
+
+func tampilkanInvestasi() {
+	tampilkanHeader("📄 Daftar Investasi FinVest")
+	if nData == 0 {
+		fmt.Println("📭 Belum ada data investasi.")
+		return
+	}
+	fmt.Printf("%-5s %-10s %-10s %-15s\n", "ID", "Nama", "Jumlah", "Total Harga")
+	fmt.Println(strings.Repeat("-", 45))
+	for i := 0; i < nData; i++ {
+		inv := daftarInvestasi[i]
+		fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n",
+			inv.ID, inv.Nama, inv.Jumlah, inv.Total)
+	}
 }
