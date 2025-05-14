@@ -2,7 +2,7 @@ package main
 import "fmt"
 
 const NMAX int = 50
-const MAXbuy int = 10
+const MAXbuy int = 20
 
 type investasi struct {
 	Nama string
@@ -40,56 +40,56 @@ var jumlahPenjualan int
 
 func main(){
 	
-	inv[0] = investasi{"RD Mandiri", 741576300, 2.5244, "Reksadana"}
-	inv[1] = investasi{"Bitcoin", 676731800, 8.9326, "Crypto"}
-	inv[2] = investasi{"RD Sucorinvest", 421979600, 0.3950, "Reksadana"}
-	inv[3] = investasi{"Ethereum", 505404800, 0.3627, "Crypto"}
-	inv[4] = investasi{"Ripple", 419577900, 4.5472, "Crypto"}
-	inv[5] = investasi{"Emas Antam", 758831500, 1.6806, "Emas"}
-	inv[6] = investasi{"BBRI", 277943600, 2.2316, "Saham"}
-	inv[7] = investasi{"Emas Antam", 92836570, 1.0575, "Emas"}
-	inv[8] = investasi{"Logam Mulia", 807147600, 7.3243, "Emas"}
-	inv[9] = investasi{"RD Schroder", 78892320, 3.0025, "Reksadana"}
-	inv[10] = investasi{"Emas UBS", 704601400, 0.5537, "Emas"}
-	inv[11] = investasi{"Solana", 985223000, 8.5676, "Crypto"}
-	inv[12] = investasi{"RD Schroder", 278045800, 6.3933, "Reksadana"}
-	inv[13] = investasi{"Emas UBS", 370243900, 2.1741, "Emas"}
-	inv[14] = investasi{"Emas Antam", 609170100, 1.7943, "Emas"}
-	inv[15] = investasi{"Ethereum", 462314000, 2.7725, "Crypto"}
-	inv[16] = investasi{"Solana", 842867600, 7.7824, "Crypto"}
-	inv[17] = investasi{"Bitcoin", 805065300, 4.0715, "Crypto"}
-	inv[18] = investasi{"RD BCA", 913144800, 5.7151, "Reksadana"}
-	inv[19] = investasi{"Emas UBS", 655473100, 4.0168, "Emas"}
-	inv[20] = investasi{"TLKM", 264953700, 2.5416, "Saham"}
-	inv[21] = investasi{"Emas Pegadaian", 897833100, 4.0541, "Emas"}
-	inv[22] = investasi{"Ethereum", 509575300, 1.0000, "Crypto"}
-	inv[23] = investasi{"RD Mandiri", 152926000, 1.6838, "Reksadana"}
-	inv[24] = investasi{"UNVR", 63621350, 3.8780, "Saham"}
-	inv[25] = investasi{"UNVR", 251489000, 5.5769, "Saham"}
-	inv[26] = investasi{"RD Mandiri", 681742200, 5.4160, "Reksadana"}
-	inv[27] = investasi{"Logam Mulia", 111641000, 4.4042, "Emas"}
-	inv[28] = investasi{"BBCA", 953820500, 8.7709, "Saham"}
-	inv[29] = investasi{"Emas UBS", 507730900, 1.1535, "Emas"}
-	inv[30] = investasi{"Emas UBS", 152924000, 7.6489, "Emas"}
-	inv[31] = investasi{"RD Sucorinvest", 324223600, 0.2928, "Reksadana"}
-	inv[32] = investasi{"Logam Mulia", 239528400, 2.4846, "Emas"}
-	inv[33] = investasi{"RD Mandiri", 731934400, 8.1786, "Reksadana"}
-	inv[34] = investasi{"Ethereum", 659784800, 9.4738, "Crypto"}
-	inv[35] = investasi{"Solana", 527721000, 6.1053, "Crypto"}
-	inv[36] = investasi{"Ripple", 755289700, 6.9297, "Crypto"}
-	inv[37] = investasi{"Emas Pegadaian", 995149800, 6.5338, "Emas"}
-	inv[38] = investasi{"UNVR", 451541000, 2.5543, "Saham"}
-	inv[39] = investasi{"RD Panin", 21132160, 5.5838, "Reksadana"}
-	inv[40] = investasi{"Bitcoin", 71085990, 6.3479, "Crypto"}
-	inv[41] = investasi{"Bitcoin", 905429500, 8.6104, "Crypto"}
-	inv[42] = investasi{"RD Sucorinvest", 238080800, 6.7229, "Reksadana"}
-	inv[43] = investasi{"Ripple", 132398600, 9.3616, "Crypto"}
-	inv[44] = investasi{"TLKM", 784641000, 8.0942, "Saham"}
-	inv[45] = investasi{"Bitcoin", 97021120, 4.3674, "Crypto"}
-	inv[46] = investasi{"ASII", 467078000, 7.3179, "Saham"}
-	inv[47] = investasi{"RD Mandiri", 402681000, 3.4591, "Reksadana"}
-	inv[48] = investasi{"RD BCA", 191670900, 5.4092, "Reksadana"}
-	inv[49] = investasi{"Cardano", 183569700, 4.6800, "Crypto"}
+	inv[0] = investasi{"RD Mandiri", 741576300.0, 2.5244, "Reksadana"}
+	inv[1] = investasi{"Bitcoin", 676731800.0, 8.9326, "Crypto"}
+	inv[2] = investasi{"RD Sucorinvest", 421979600.0, 0.3950, "Reksadana"}
+	inv[3] = investasi{"Ethereum", 505404800.0, 0.3627, "Crypto"}
+	inv[4] = investasi{"Ripple", 419577900.0, 4.5472, "Crypto"}
+	inv[5] = investasi{"Emas Antam", 758831500.0, 1.6806, "Emas"}
+	inv[6] = investasi{"BBRI", 277943600.0, 2.2316, "Saham"}
+	inv[7] = investasi{"Emas Antam", 92836570.0, 1.0575, "Emas"}
+	inv[8] = investasi{"Logam Mulia", 807147600.0, 7.3243, "Emas"}
+	inv[9] = investasi{"RD Schroder", 78892320.0, 3.0025, "Reksadana"}
+	inv[10] = investasi{"Emas UBS", 704601400.0, 0.5537, "Emas"}
+	inv[11] = investasi{"Solana", 985223000.0, 8.5676, "Crypto"}
+	inv[12] = investasi{"RD Schroder", 278045800.0, 6.3933, "Reksadana"}
+	inv[13] = investasi{"Emas UBS", 370243900.0, 2.1741, "Emas"}
+	inv[14] = investasi{"Emas Antam", 609170100.0, 1.7943, "Emas"}
+	inv[15] = investasi{"Ethereum", 462314000.0, 2.7725, "Crypto"}
+	inv[16] = investasi{"Solana", 842867600.0, 7.7824, "Crypto"}
+	inv[17] = investasi{"Bitcoin", 805065300.0, 4.0715, "Crypto"}
+	inv[18] = investasi{"RD BCA", 913144800.0, 5.7151, "Reksadana"}
+	inv[19] = investasi{"Emas UBS", 655473100.0, 4.0168, "Emas"}
+	inv[20] = investasi{"TLKM", 264953700.0, 2.5416, "Saham"}
+	inv[21] = investasi{"Emas Pegadaian", 897833100.0, 4.0541, "Emas"}
+	inv[22] = investasi{"Ethereum", 509575300.0, 1.0000, "Crypto"}
+	inv[23] = investasi{"RD Mandiri", 152926000.0, 1.6838, "Reksadana"}
+	inv[24] = investasi{"UNVR", 63621350.0, 3.8780, "Saham"}
+	inv[25] = investasi{"UNVR", 251489000.0, 5.5769, "Saham"}
+	inv[26] = investasi{"RD Mandiri", 681742200.0, 5.4160, "Reksadana"}
+	inv[27] = investasi{"Logam Mulia", 111641000.0, 4.4042, "Emas"}
+	inv[28] = investasi{"BBCA", 953820500.0, 8.7709, "Saham"}
+	inv[29] = investasi{"Emas UBS", 507730900.0, 1.1535, "Emas"}
+	inv[30] = investasi{"Emas UBS", 152924000.0, 7.6489, "Emas"}
+	inv[31] = investasi{"RD Sucorinvest", 324223600.0, 0.2928, "Reksadana"}
+	inv[32] = investasi{"Logam Mulia", 239528400.0, 2.4846, "Emas"}
+	inv[33] = investasi{"RD Mandiri", 731934400.0, 8.1786, "Reksadana"}
+	inv[34] = investasi{"Ethereum", 659784800.0, 9.4738, "Crypto"}
+	inv[35] = investasi{"Solana", 527721000.0, 6.1053, "Crypto"}
+	inv[36] = investasi{"Ripple", 755289700.0, 6.9297, "Crypto"}
+	inv[37] = investasi{"Emas Pegadaian", 995149800.0, 6.5338, "Emas"}
+	inv[38] = investasi{"UNVR", 451541000.0, 2.5543, "Saham"}
+	inv[39] = investasi{"RD Panin", 21132160.0, 5.5838, "Reksadana"}
+	inv[40] = investasi{"Bitcoin", 71085990.0, 6.3479, "Crypto"}
+	inv[41] = investasi{"Bitcoin", 905429500.0, 8.6104, "Crypto"}
+	inv[42] = investasi{"RD Sucorinvest", 238080800.0, 6.7229, "Reksadana"}
+	inv[43] = investasi{"Ripple", 132398600.0, 9.3616, "Crypto"}
+	inv[44] = investasi{"TLKM", 784641000.0, 8.0942, "Saham"}
+	inv[45] = investasi{"Bitcoin", 97021120.0, 4.3674, "Crypto"}
+	inv[46] = investasi{"ASII", 467078000.0, 7.3179, "Saham"}
+	inv[47] = investasi{"RD Mandiri", 402681000.0, 3.4591, "Reksadana"}
+	inv[48] = investasi{"RD BCA", 191670900.0, 5.4092, "Reksadana"}
+	inv[49] = investasi{"Cardano", 183569700.0, 4.6800, "Crypto"}
 	//inv[50] = investasi{"RD Schroder", 808041442, 8.5741, "Reksadana"}
 	
 	//var d selfData
@@ -97,15 +97,14 @@ func main(){
 	//var key cari
 	//var id string
 	
-	fmt.Println("-----------------------------------------------------")
+	fmt.Println("+---------------------------------------------------+")
 	fmt.Printf("|%52s\n", "|")
-	fmt.Printf("%-14sMasukkan Data Diri Anda%14s\n", "|", "|")
+	fmt.Printf("%-14sMasukkan Data Diri Anda%16s\n", "|", "|")
 	fmt.Printf("|%52s\n", "|")
-	fmt.Println("-----------------------------------------------------")
-	fmt.Println("-----------------------------------------------------")
+	fmt.Println("+---------------------------------------------------+")
+	fmt.Println("+---------------------------------------------------+")
 	fmt.Println()
 	dataPengguna(&d)
-	menu()
 }
 
 func menu(){ //======================================================== (3)
@@ -118,14 +117,16 @@ func menu(){ //======================================================== (3)
 	fmt.Println("2. Sell asset")
 	fmt.Println("3. Tampilkan semua investasi")
 	fmt.Println("4. Keluar")
+	fmt.Println()
+	fmt.Printf("Jawaban anda:")
 	fmt.Scan(&M.opsi)
 	pemanggilan(M, &key, &id)
 }
 
 func dataPengguna(D *selfData){ //===================================== (1)
-	fmt.Printf("Nama%7s", ":")
+	fmt.Printf("Nama%7s ", ":")
 	fmt.Scan(&D.name)
-	fmt.Printf("Usia%7s", ":")
+	fmt.Printf("Usia%7s ", ":")
 	fmt.Scan(&D.age)
 	fmt.Println("-----------------------------------------------------")
 	fmt.Println()
@@ -133,8 +134,10 @@ func dataPengguna(D *selfData){ //===================================== (1)
 }
 
 func deposit(D *selfData){ //=========================================== (2)
-	fmt.Printf("Deposit%4s", ":")
-	fmt.Scan(D.deposit)
+	fmt.Printf("Deposit%4s ", ":")
+	fmt.Scan(&D.deposit)
+	fmt.Println()
+	fmt.Println("-----------------------------------------------------")
 	menu()
 }
 
@@ -148,16 +151,21 @@ func pemanggilan(M Menu, target *cari, kode *string){ //=============== (4)
 			fmt.Println("Temukan Aset :")
 			fmt.Println("-----------------------------------------------------")
 			fmt.Printf("Masukkan kode pencarian [N, H, J, K] :")
-			fmt.Scan(&kode)
+			fmt.Scan(kode)
 			if *kode == "N"{
+				fmt.Printf("Nama Aset%9s ", ":")
 				fmt.Scan(&target.Nama)
 			} else if *kode == "H" {
+				fmt.Printf("Harga maksimal%4s ", ":")
 				fmt.Scan(&target.Harga)
 			} else if *kode == "J" {
+				fmt.Printf("Jumlah maksimal%3s ", ":")
 				fmt.Scan(&target.Jumlah)
 			} else {
+				fmt.Printf("Kategori%10s ", ":")
 				fmt.Scan(&target.Kategori)
 			}
+			Buy(inv, *target, *kode)
 			printPencarian(inv, &pilih, &done, *target, *kode)
 		case 2:
 			investasiSaya()
@@ -177,31 +185,35 @@ func printPencarian(inv [NMAX]investasi, pilih *int, done *[1]investasi, target 
 	var i, j int
 	//var target cari
 	//var kode string
-	var temukan [10]investasi
+	var temukan [20]investasi
 	var panjang int
+	var D selfData
 	temukan, panjang = Buy(inv, target, kode)
 	if panjang > 0 {
 		fmt.Println()
+		fmt.Println("-----------------------------------------------------")
 		fmt.Println("Data yang berhasil ditemukan :")
 		fmt.Println("-----------------------------------------------------")
 		for i = 0; i < panjang; i++{
+			fmt.Printf("%d. ", i+1)
 			fmt.Println(temukan[i])
 			fmt.Println()
 		}
 		fmt.Println("-----------------------------------------------------")
 		fmt.Println("Mana yang akan anda beli 1/2/3/...?")
-		fmt.Println()
-		fmt.Scan(pilih) 
+		fmt.Printf("Urutan ke%4s ", ":")
+		fmt.Scan(pilih)
+		fmt.Println()		
 		for j = 0; j < panjang; j++ {
-			if temukan[j].Nama == temukan[*pilih].Nama {
-				*done[0] = temukan[j]
-				fmt.Println(done[0])
+			if temukan[j] == temukan[*pilih-1] {
+				(*done)[0] = temukan[j]
+				fmt.Println((*done)[0])
 			}
 		}
 		
-		*done = [1]investasi{temukan[*pilih]}
+		*done = [1]investasi{temukan[*pilih-1]}
 		fmt.Println()
-		fmt.Println(totalBuy(inv, done,))
+		fmt.Println(totalBuy(inv, done, &D))
 		fmt.Println("-----------------------------------------------------")
 		menu()
 	} else {
@@ -209,10 +221,10 @@ func printPencarian(inv [NMAX]investasi, pilih *int, done *[1]investasi, target 
 	}
 }
 
-func Buy(inv [NMAX]investasi, target cari, kode string) ([10]investasi, int) { //proses I.I
+func Buy(inv [NMAX]investasi, target cari, kode string) ([20]investasi, int) { //proses I.I
 	var i int
 	var idx int = 0
-	var klasifikasi [10]investasi
+	var klasifikasi [20]investasi
 	if kode == "N" {
 		for i = 0; i < NMAX; i++ {
 			if inv[i].Nama == target.Nama {
@@ -222,14 +234,14 @@ func Buy(inv [NMAX]investasi, target cari, kode string) ([10]investasi, int) { /
 		}
 	} else if kode == "H" {
 		for i = 0; i < NMAX; i++ {
-			if inv[i].Harga == target.Harga {
+			if inv[i].Harga >= target.Harga {
 				klasifikasi[idx] = inv[i]
 				idx++
 			}
 		}
 	} else if kode == "J" {
 		for i = 0; i < NMAX; i++ {
-			if inv[i].Jumlah == target.Jumlah {
+			if inv[i].Jumlah >= target.Jumlah {
 				klasifikasi[idx] = inv[i]
 				idx++
 			}
@@ -247,7 +259,7 @@ func Buy(inv [NMAX]investasi, target cari, kode string) ([10]investasi, int) { /
 }
 
 //mengubah nilai di array investasi secara non-permanen
-func totalBuy(inv [NMAX]investasi, done [1]investasi, D *selfData) *investasi{ //proses I.II
+func totalBuy(inv [NMAX]investasi, done *[1]investasi, D *selfData) *investasi{ //proses I.II
 	var akanBeli investasi
 	//var D selfData
 	var totalBeli float64
@@ -258,11 +270,11 @@ func totalBuy(inv [NMAX]investasi, done [1]investasi, D *selfData) *investasi{ /
 		fmt.Scan(&akanBeli.Jumlah)
 		if akanBeli.Jumlah <= done[i].Jumlah {
 			totalBeli = akanBeli.Harga * akanBeli.Jumlah
-			fmt.Printf("Totalnya%9s %d\n", ":", totalBeli)
+			fmt.Printf("Totalnya%9s %f\n", ":", totalBeli)
 			
 			if jumlahPembelian < MAXbuy {
 				D.deposit = D.deposit - totalBeli
-				fmt.Printf("Sisa saldo%5s %d\n", ":", D.deposit)
+				fmt.Printf("Sisa saldo%5s %f\n", ":", D.deposit)
 				akanBeli.Harga = totalBeli
 				akanBeli.Nama = done[i].Nama
 				akanBeli.Kategori = done[i].Kategori
@@ -314,7 +326,7 @@ func pilihSell(done *[1]investasi){
 	//var target cari
 	//var kode string
 	var temukan investasi
-	var panjang int = 10
+	var panjang int = 20
 	PenjualanSaya = pembelianSaya
 		fmt.Println("-----------------------------------------------------")
 		fmt.Println("Mana yang akan anda jual 1/2/3/...?")
@@ -323,9 +335,9 @@ func pilihSell(done *[1]investasi){
 		temukan = PenjualanSaya[pilih]
 		if pilih >= 0 && pilih < panjang {
 			for j = 0; j < panjang; j++ {
-				if PenjualanSaya[j].Nama == temukan[pilih].Nama {
-					*done[0] = temukan[j]
-					fmt.Println(done[0])
+				if PenjualanSaya[j].Nama == temukan.Nama {
+					(*done)[0] = PenjualanSaya[j]
+					fmt.Println((*done)[0])
 				}
 			}
 		}
@@ -370,7 +382,7 @@ func Sell(inv [NMAX]investasi, done [1]investasi)*investasi{
 
 func tampilkanInv(inv [NMAX]investasi){
 	var akanJual investasi
-	var panjang int = 10
+	var panjang int = 20
 	var i int
 	fmt.Printf("%13s\n", "--Investasi Saya saat ini--")
 	fmt.Println("-----------------------------------------------------")
@@ -389,20 +401,21 @@ func tampilkanInv(inv [NMAX]investasi){
 
 func endOfProgram(putuskan *string){
 	fmt.Printf("%13s\n", "Yakin Ingin Keluar?")
-	fmt.Printf("%s %16s\n", "+-------+", "+-------+")
-	fmt.Printf("%s %s %s %16s %s %s\n", "|", "Ya", "|", "|", "Tidak", "|")
-	fmt.Printf("%s %16s\n", "+-------+", "+-------+")
+	fmt.Printf("+-------+   +-------+\n")
+	fmt.Printf("|  %-5s|   | %-5s |\n", "Ya", "Tidak")
+	fmt.Printf("+-------+   +-------+\n")
 	fmt.Println()
-	fmt.Printf("Jawaban anda :")
+	fmt.Printf("Pilih mana? :")
 	fmt.Scan(putuskan)
 	switch *putuskan {
 	
 	case "Ya":
 		fmt.Println("-----------------------------------------------------")
 		fmt.Println("-----------------------------------------------------")
-		fmt.Printf("%17s\n", "--Program Berakhir--")
+		fmt.Printf("%-17s\n", "--Program Berakhir--")
 		break
 	case "Tidak":
+		fmt.Println("-----------------------------------------------------")
 		menu()
 	}
 }
