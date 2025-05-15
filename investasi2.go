@@ -1,5 +1,8 @@
 package main
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 const NMAX int = 50
 const MAXbuy int = 20
@@ -481,6 +484,7 @@ func endOfProgram(putuskan *string, D *selfData){
 		fmt.Println("-----------------------------------------------------")
 		fmt.Println("-----------------------------------------------------")
 		fmt.Printf("%-17s\n", "--Program Berakhir--")
+		os.Exit(0)
 	case "Tidak":
 		fmt.Println("-----------------------------------------------------")
 		menu(D)
