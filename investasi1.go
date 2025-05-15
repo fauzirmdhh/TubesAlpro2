@@ -56,9 +56,9 @@ func main() {
 
 func buatAkun() {
 	fmt.Println("\n📌 Buat Akun Baru")
-	fmt.Print("🧑 Username: ")
+	fmt.Print("Username: ")
 	fmt.Scanln(&akun.Username)
-	fmt.Print("🔒 Password: ")
+	fmt.Print("Password: ")
 	fmt.Scanln(&akun.Password)
 	fmt.Println("✅ Akun berhasil dibuat!\n")
 }
@@ -67,9 +67,9 @@ func login() {
 	var LoginUsn, LoginPass string
 
 	fmt.Println("\n🔐 Login")
-	fmt.Print("🧑 Username: ")
+	fmt.Print("Username: ")
 	fmt.Scanln(&LoginUsn)
-	fmt.Print("🔒 Password: ")
+	fmt.Print("Password: ")
 	fmt.Scanln(&LoginPass)
 
 	if LoginUsn == akun.Username && LoginPass == akun.Password {
@@ -89,12 +89,12 @@ func tampilkanHeader(judul string) {
 func menuUtama() {
 	var pilihan int
 	tampilkanHeader("📊 FinVest - Menu Utama")
-	fmt.Println("1. ➕ Tambah Investasi")
-	fmt.Println("2. ➖ Jual/Tarik Investasi")
-	fmt.Println("3. 🔼 Urutkan Berdasarkan Harga (Ascending)")
-	fmt.Println("4. 🔤 Urutkan Berdasarkan ID (Ascending)")
-	fmt.Println("5. 📄 Lihat Daftar Investasi")
-	fmt.Println("6. 🚪 Logout")
+	fmt.Println("1. Tambah Investasi")
+	fmt.Println("2. Jual/Tarik Investasi")
+	fmt.Println("3. Urutkan Berdasarkan Harga (Ascending)")
+	fmt.Println("4. Urutkan Berdasarkan ID (Ascending)")
+	fmt.Println("5. Lihat Daftar Investasi")
+	fmt.Println("6. Logout")
 	fmt.Print(">> Pilihan Anda: ")
 	fmt.Scanln(&pilihan)
 
@@ -141,7 +141,7 @@ func sortByHarga() {
 		}
 		daftarInvestasi[i], daftarInvestasi[minIdx] = daftarInvestasi[minIdx], daftarInvestasi[i]
 	}
-	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan total harga (termurah ke termahal).")
+	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan total harga (terendah ke tertinggi).")
 	tampilkanInvestasi() // langsung tampilkan hasil
 }
 
@@ -190,7 +190,7 @@ func tambahInvestasi() {
 		return
 	}
 
-	fmt.Print("🔢 Masukkan jumlah (gram/lembar/lot): ")
+	fmt.Print("Masukkan jumlah (gram/lembar/lot): ")
 	fmt.Scanln(&jumlah)
 
 	daftarInvestasi[nData] = Investasi{
@@ -207,7 +207,7 @@ func tambahInvestasi() {
 func tarikInvestasi() {
 	var id int
 	tampilkanInvestasi()
-	fmt.Print("\n🔻 Masukkan ID investasi yang ingin ditarik: ")
+	fmt.Print("\n Masukkan ID investasi yang ingin ditarik: ")
 	fmt.Scanln(&id)
 
 	// Inisialisasi index sebagai -1
@@ -236,9 +236,9 @@ func tarikInvestasi() {
 }
 
 func tampilkanInvestasi() {
-	tampilkanHeader("📄 Daftar Investasi FinVest")
+	tampilkanHeader("\n📄 Daftar Investasi FinVest")
 	if nData == 0 {
-		fmt.Println("📭 Belum ada data investasi.")
+		fmt.Println("\n📭 Belum ada data investasi.")
 		return
 	}
 	fmt.Printf("%-5s %-10s %-10s %-15s\n", "ID", "Nama", "Jumlah", "Total Harga")
