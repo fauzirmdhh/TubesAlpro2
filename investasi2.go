@@ -223,7 +223,7 @@ func pemanggilan(M Menu, target *cari, kode *string, D *selfData, done *[1]inves
 			printPencarian(inv, &pilih, done, target, kode, D)
 		case 3:
 			investasiSaya(D)
-			pilihSell(&pilih, done, D)
+			pilihSell(done, D)
 			fmt.Println(Sell(inv, done))
 			fmt.Println("-----------------------------------------------------")
 		case 4:
@@ -234,7 +234,7 @@ func pemanggilan(M Menu, target *cari, kode *string, D *selfData, done *[1]inves
 //buy program================================================================
 
 func printPencarian(inv [NMAX]investasi, pilih *int, done *[1]investasi, target *cari, kode *string, D *selfData) { //option I
-	var i, j int
+	var i, j, miN, tukar, y int
 	var temukan [20]investasi
 	var panjang int
 	var totalBuyVal *investasi
@@ -244,14 +244,25 @@ func printPencarian(inv [NMAX]investasi, pilih *int, done *[1]investasi, target 
 		fmt.Println("-----------------------------------------------------")
 		fmt.Println("Data yang berhasil ditemukan :")
 		fmt.Println("-----------------------------------------------------")
+		fmt.Println("Data telah diurutkan mulai dari harga yang terendah:")
+		fmt.Println()
 		for i = 0; i < panjang; i++{
+			
+			//selection sort
+			miN = i
+			for y = i+1; y < panjang; y++ {
+				tukar = y
+				if temukan[tukar].Harga < temukan[miN].Harga {
+					miN = tukar
+				}
+			}
+			temukan[i], temukan[miN] = temukan[miN], temukan[i]
 			fmt.Printf("%d. \n", i+1)
 			fmt.Printf("%4s Aset%10s %s\n", "|", ":", temukan[i].Nama)
 			fmt.Printf("%4s Kategori%6s %s\n", "|", ":", temukan[i].Kategori)
 			fmt.Printf("%4s Jumlah%8s %.4f\n", "|", ":", temukan[i].Jumlah)
 			fmt.Printf("%4s Total Harga%3s %.2f\n", "|", ":", temukan[i].Harga)
 			fmt.Println("-----------------------------------------------------")
-			//fmt.Println()
 		}
 		fmt.Println("-----------------------------------------------------")
 		fmt.Println("Mana yang akan anda beli 1/2/3/...?")
@@ -271,12 +282,19 @@ func printPencarian(inv [NMAX]investasi, pilih *int, done *[1]investasi, target 
 		*done = [1]investasi{temukan[*pilih-1]}
 		fmt.Println()
 		totalBuyVal = totalBuy(inv, done, D)
+		if totalBuyVal == nil {
+			fmt.Println("Pembelian gagal:")
+			fmt.Println("lakukan pembelian dengan nominal dibawah deposit anda")
+			fmt.Println("-----------------------------------------------------")
+			menu(D, done)
+		}
 		fmt.Printf("%4s Aset%10s %s\n", "|", ":", totalBuyVal.Nama)
 		fmt.Printf("%4s Kategori%6s %s\n", "|", ":",totalBuyVal.Kategori)
 		fmt.Printf("%4s Jumlah%8s %.4f\n", "|", ":", totalBuyVal.Jumlah)
 		fmt.Printf("%4s Total Harga%3s %.2f\n", "|", ":", totalBuyVal.Harga)
 		fmt.Println("-----------------------------------------------------")
 		menu(D, done)
+		return
 	} else {
 		fmt.Println("+---------------------------------------------------+")
 		fmt.Printf("%-22sNot Found%21s\n", "|", "|")
@@ -286,6 +304,7 @@ func printPencarian(inv [NMAX]investasi, pilih *int, done *[1]investasi, target 
 	}
 }
 
+//linear saerch
 func Buy(inv [NMAX]investasi, target cari, kode string) ([20]investasi, int) { //proses I.I
 	var i int
 	var idx int = 0
@@ -299,14 +318,14 @@ func Buy(inv [NMAX]investasi, target cari, kode string) ([20]investasi, int) { /
 		}
 	} else if kode == "H" {
 		for i = 0; i < NMAX; i++ {
-			if inv[i].Harga <= target.Harga {
+			if inv[i].Harga <= target.Harga && i < 20 {
 				klasifikasi[idx] = inv[i]
 				idx++
 			}
 		}
 	} else if kode == "J" {
 		for i = 0; i < NMAX; i++ {
-			if inv[i].Jumlah <= target.Jumlah {
+			if inv[i].Jumlah <= target.Jumlah && i < 20 {
 				klasifikasi[idx] = inv[i]
 				idx++
 			}
@@ -328,20 +347,39 @@ func totalBuy(inv [NMAX]investasi, done *[1]investasi, D *selfData) *investasi{ 
 	var akanBeli investasi
 	var totalBeli float64
 	var i int = 0
+	var j int
 	if done[i].Nama != "" {
+		
+		//harga perunit Jumlah
 		akanBeli.Harga = done[i].Harga / done[i].Jumlah
 		fmt.Printf("Sejumlah%9s ", ":")
 		fmt.Scan(&akanBeli.Jumlah)
 		if akanBeli.Jumlah <= done[i].Jumlah {
 			totalBeli = akanBeli.Harga * akanBeli.Jumlah
+			if totalBeli > D.deposit {
+				fmt.Println("Saldo tidak cukup untuk membeli aset ini.")
+					return nil
+			}
 			fmt.Printf("Totalnya%9s %.2f\n", ":", totalBeli)
 			
+			//memastikan jumlah pembelian hanya diproses jika dibawah MAXbuy
 			if jumlahPembelian < MAXbuy {
 				D.deposit -= totalBeli
 				fmt.Printf("Sisa saldo%7s %.2f\n", ":", D.deposit)
 				akanBeli.Harga = totalBeli
 				akanBeli.Nama = done[i].Nama
 				akanBeli.Kategori = done[i].Kategori
+				
+				//jika aset sudah ada dengan nama dan kategori yang sama, bisa digabung saja tanpa pemborosan list baru
+				for j = 0; j < jumlahPembelian; j++ {
+					if pembelianSaya[j].Nama == akanBeli.Nama && pembelianSaya[j].Kategori == akanBeli.Kategori {
+						pembelianSaya[j].Jumlah += akanBeli.Jumlah
+						pembelianSaya[j].Harga += akanBeli.Harga
+						return &pembelianSaya[j]
+					}
+				}
+				
+				//jika tidak ada langsung return nilainya saja
 				pembelianSaya[jumlahPembelian] = akanBeli
 				fmt.Println()
 				fmt.Printf("Investasi saya%1s\n", ":")
@@ -368,7 +406,7 @@ func investasiSaya(D *selfData){
 		fmt.Println("Silahkan lakukan pembelian dulu")
 		fmt.Println("-----------------------------------------------------")
 		menu(D, &done)
-		return
+		return //memastikan tidak dilakukan pengecekan lagi di pengkondisian dibawah
 	} else {
 		fmt.Println("-----------------------------------------------------")
 		fmt.Printf("%14s\n", "Daftar Aset investasi Saya")
@@ -386,21 +424,25 @@ func investasiSaya(D *selfData){
 	
 }
 
-func pilihSell(pilih *int, done *[1]investasi, D *selfData){ 
+func pilihSell(done *[1]investasi, D *selfData){ 
 	var j int
 	var temukan [20]investasi
 	var SellVal *investasi
 	var panjang int = 20
+	var pilih int
 	PenjualanSaya = pembelianSaya
 		fmt.Println("-----------------------------------------------------")
 		fmt.Println("Mana yang akan anda jual 1/2/3/...?")
 		fmt.Printf("Urutan ke%4s ", ":")
-		fmt.Scan(pilih)
+		fmt.Scan(&pilih)
 		fmt.Println()
-		temukan[0] = PenjualanSaya[*pilih-1]
-		if *pilih >= 0 && *pilih < panjang {
+		temukan[0] = PenjualanSaya[pilih-1]
+		if pilih >= 0 && pilih < panjang {
 			for j = 0; j < panjang; j++ {
-				if PenjualanSaya[j].Nama == temukan[0].Nama {
+				if PenjualanSaya[j].Nama == temukan[0].Nama &&
+					PenjualanSaya[j].Kategori == temukan[0].Kategori &&
+					PenjualanSaya[j].Harga == temukan[0].Harga &&
+					PenjualanSaya[j].Jumlah == temukan[0].Jumlah {
 					(*done)[0] = PenjualanSaya[j]
 					fmt.Printf("%4s Aset%10s %s\n", "|", ":", (*done)[0].Nama)
 					fmt.Printf("%4s Kategori%6s %s\n", "|", ":",(*done)[0].Kategori)
@@ -409,8 +451,16 @@ func pilihSell(pilih *int, done *[1]investasi, D *selfData){
 				}
 			}
 		}
-		*done = [1]investasi{temukan[*pilih-1]}
+		//mengisi done dengan data 'PenjualanSaya'
+		*done = [1]investasi{PenjualanSaya[pilih-1]}
 		SellVal = Sell(inv, done)
+		if SellVal == nil {
+			fmt.Println("Penjualan gagal:")
+			fmt.Println("tampaknya anda tidak punya aset yang dapat dijual")
+			fmt.Println("-----------------------------------------------------")
+			menu(D, done)
+			return
+		}
 		fmt.Printf("%4s Nama%10s %s\n", "|", ":", SellVal.Nama)
 		fmt.Printf("%4s Kategori%6s %s\n", "|", ":",SellVal.Kategori)
 		fmt.Printf("%4s Sejumlah%6s %.4f\n", "|", ":", SellVal.Jumlah)
@@ -423,6 +473,9 @@ func Sell(inv [NMAX]investasi, done *[1]investasi)*investasi{
 	var akanJual investasi
 	var totalJual float64
 	var i int = 0
+	var j int = 0
+	var k int 
+	var sudahDiproses bool = false
 	if done[i].Nama != "" {
 		akanJual.Harga = done[i].Harga / done[i].Jumlah
 		fmt.Println()
@@ -433,6 +486,22 @@ func Sell(inv [NMAX]investasi, done *[1]investasi)*investasi{
 			fmt.Printf("Totalnya%9s %.2f\n", ":", totalJual)
 			
 			if jumlahPenjualan < MAXbuy {
+				for !sudahDiproses && j < jumlahPembelian {
+					if pembelianSaya[j].Nama == done[i].Nama && pembelianSaya[j].Kategori == done[i].Kategori {
+						pembelianSaya[j].Jumlah -= akanJual.Jumlah
+						if pembelianSaya[j].Jumlah <= 0 {
+							for k = j; k < jumlahPembelian-1; k++ {
+								pembelianSaya[k] = pembelianSaya[k+1]
+							}
+							jumlahPembelian--
+						} else {
+							j++
+						}
+						sudahDiproses = true
+					} else {
+						j++
+					}
+				}
 				akanJual.Harga = totalJual
 				akanJual.Nama = done[i].Nama
 				akanJual.Kategori = done[i].Kategori
@@ -497,4 +566,4 @@ func endOfProgram(putuskan *string, D *selfData){
 	}
 }
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<(FINISH)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<(PERLU DI SELESAIKAN)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
