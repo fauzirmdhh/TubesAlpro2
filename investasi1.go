@@ -9,7 +9,7 @@ const NMAX int = 20
 
 var akun Akun
 var daftarInvestasi [NMAX]Investasi
-var nData = 0
+var nData int
 var isLoggedIn bool = false
 var idCounter int = 100
 
@@ -81,72 +81,48 @@ func login() {
 }
 
 func tampilkanHeader(judul string) {
-	fmt.Println(strings.Repeat("=", len(judul)))
+	fmt.Println(strings.Repeat("=", 45))
 	fmt.Println(judul)
-	fmt.Println(strings.Repeat("=", len(judul)))
+	fmt.Println(strings.Repeat("=", 45))
 }
 
 func menuUtama() {
 	var pilihan int
+
 	tampilkanHeader("📊 FinVest - Menu Utama")
 	fmt.Println("1. Tambah Investasi")
 	fmt.Println("2. Jual/Tarik Investasi")
 	fmt.Println("3. Urutkan Berdasarkan Harga (Ascending)")
-	fmt.Println("4. Urutkan Berdasarkan ID (Ascending)")
-	fmt.Println("5. Lihat Daftar Investasi")
-	fmt.Println("6. Logout")
+	fmt.Println("4. Urutkan Berdasarkan Harga (Descending)")
+	fmt.Println("5. Urutkan Berdasarkan ID (Ascending)")
+	fmt.Println("6. Lihat Daftar Investasi")
+	fmt.Println("7. Logout")
 	fmt.Print(">> Pilihan Anda: ")
 	fmt.Scanln(&pilihan)
 
 	switch pilihan {
 	case 1:
-		tambahInvestasi()
+		tambahInvestasi(&daftarInvestasi, &nData)
 	case 2:
-		tarikInvestasi()
+		tarikInvestasi(&daftarInvestasi, &nData)
 	case 3:
-		sortByHarga()
+		sortByHargaAsc(&daftarInvestasi, nData)
 	case 4:
-		sortByID()
+		sortByHargaDsc(&daftarInvestasi, nData)
 	case 5:
-		tampilkanInvestasi()
+		sortByID(&daftarInvestasi, nData)
 	case 6:
+		tampilkanInvestasi(&daftarInvestasi, nData)
+	case 7:
 		isLoggedIn = false
 		fmt.Println("🔓 Logout berhasil.\n")
 	default:
-		fmt.Println("🚫 Pilihan tidak valid.")
+		fmt.Println("🚫 Pilihan tidak valid.\n")
 	}
 }
 
-func sortByID() {
-	for i := 0; i < nData-1; i++ {
-		minIdx := i
-		for j := i + 1; j < nData; j++ {
-			if daftarInvestasi[j].ID < daftarInvestasi[minIdx].ID {
-				minIdx = j
-			}
-		}
-		daftarInvestasi[i], daftarInvestasi[minIdx] = daftarInvestasi[minIdx], daftarInvestasi[i]
-	}
-	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan ID (terkecil ke terbesar).")
-	tampilkanInvestasi()
-}
-
-func sortByHarga() {
-	for i := 0; i < nData-1; i++ {
-		minIdx := i
-		for j := i + 1; j < nData; j++ {
-			if daftarInvestasi[j].Total < daftarInvestasi[minIdx].Total {
-				minIdx = j
-			}
-		}
-		daftarInvestasi[i], daftarInvestasi[minIdx] = daftarInvestasi[minIdx], daftarInvestasi[i]
-	}
-	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan total harga (terendah ke tertinggi).")
-	tampilkanInvestasi() // langsung tampilkan hasil
-}
-
-func tambahInvestasi() {
-	if nData >= NMAX {
+func tambahInvestasi(data *[NMAX]Investasi, n *int) {
+	if *n >= NMAX {
 		fmt.Println("🚫 Data investasi penuh!")
 		return
 	}
@@ -193,59 +169,99 @@ func tambahInvestasi() {
 	fmt.Print("Masukkan jumlah (gram/lembar/lot): ")
 	fmt.Scanln(&jumlah)
 
-	daftarInvestasi[nData] = Investasi{
+	data[*n] = Investasi{
 		ID:     idCounter,
 		Nama:   nama,
 		Jumlah: jumlah,
 		Total:  jumlah * hargaSatuan,
 	}
 	idCounter++
-	nData++
-	fmt.Println("✅ Investasi berhasil ditambahkan!")
+	*n++
+	fmt.Println("✅ Investasi berhasil ditambahkan!\n")
 }
 
-func tarikInvestasi() {
+func tarikInvestasi(data *[NMAX]Investasi, n *int) {
 	var id int
-	tampilkanInvestasi()
-	fmt.Print("\n Masukkan ID investasi yang ingin ditarik: ")
+	tampilkanInvestasi(data, *n)
+	fmt.Print("\nMasukkan ID investasi yang ingin ditarik: ")
 	fmt.Scanln(&id)
 
-	// Inisialisasi index sebagai -1
 	index := -1
 	i := 0
 
-	for i < nData {
-		if daftarInvestasi[i].ID == id {
+	for i < *n {
+		if data[i].ID == id {
 			index = i
-			i = nData // langsung keluar dari loop dengan menyelesaikan kondisi
+			i = *n // keluar dari loop tanpa break
 		} else {
 			i++
 		}
 	}
 
 	if index != -1 {
-		// Geser elemen ke kiri untuk menghapus data pada index
-		for j := index; j < nData-1; j++ {
-			daftarInvestasi[j] = daftarInvestasi[j+1]
+		for j := index; j < *n-1; j++ {
+			data[j] = data[j+1]
 		}
-		nData--
+		*n--
 		fmt.Println("✅ Investasi berhasil ditarik!\n")
 	} else {
 		fmt.Println("🚫 ID tidak ditemukan.\n")
 	}
 }
 
-func tampilkanInvestasi() {
-	tampilkanHeader("\n📄 Daftar Investasi FinVest")
-	if nData == 0 {
-		fmt.Println("\n📭 Belum ada data investasi.")
+func sortByHargaAsc(data *[NMAX]Investasi, n int) { // Ascending
+	for i := 0; i < n-1; i++ {
+		minIdx := i
+		for j := i + 1; j < n; j++ {
+			if data[j].Total < data[minIdx].Total {
+				minIdx = j
+			}
+		}
+		data[i], data[minIdx] = data[minIdx], data[i]
+	}
+	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan total harga (terendah ke tertinggi).\n")
+	tampilkanInvestasi(data, n)
+}
+
+func sortByHargaDsc(data *[NMAX]Investasi, n int) { // Descending
+	for i := 0; i < n-1; i++ {
+		maxIdx := i
+		for j := i + 1; j < n; j++ {
+			if data[j].Total > data[maxIdx].Total {
+				maxIdx = j
+			}
+		}
+		data[i], data[maxIdx] = data[maxIdx], data[i]
+	}
+	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan total harga (tertinggi ke terendah).\n")
+	tampilkanInvestasi(data, n)
+}
+
+func sortByID(data *[NMAX]Investasi, n int) {
+	for i := 0; i < n-1; i++ {
+		minIdx := i
+		for j := i + 1; j < n; j++ {
+			if data[j].ID < data[minIdx].ID {
+				minIdx = j
+			}
+		}
+		data[i], data[minIdx] = data[minIdx], data[i]
+	}
+	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan ID (terkecil ke terbesar).\n")
+	tampilkanInvestasi(data, n)
+}
+
+func tampilkanInvestasi(data *[NMAX]Investasi, n int) {
+	tampilkanHeader("Daftar Investasi FinVest")
+	if n == 0 {
+		fmt.Println("Belum ada data investasi.")
 		return
 	}
 	fmt.Printf("%-5s %-10s %-10s %-15s\n", "ID", "Nama", "Jumlah", "Total Harga")
 	fmt.Println(strings.Repeat("-", 45))
-	for i := 0; i < nData; i++ {
-		inv := daftarInvestasi[i]
-		fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n",
-			inv.ID, inv.Nama, inv.Jumlah, inv.Total)
+	for i := 0; i < n; i++ {
+		inv := data[i]
+		fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n", inv.ID, inv.Nama, inv.Jumlah, inv.Total)
 	}
+	fmt.Println()
 }
