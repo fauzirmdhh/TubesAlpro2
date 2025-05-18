@@ -147,8 +147,8 @@ func main(){
 		}
 	}
 	if k == 3 {
-			fmt.Println()
-			fmt.Printf("Gagal dilakukan login, silahkan mulai dari awal \n")
+		fmt.Println()
+		fmt.Printf("Gagal dilakukan login, silahkan mulai dari awal \n")
 	}
 }
 
