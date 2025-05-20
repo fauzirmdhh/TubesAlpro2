@@ -16,6 +16,7 @@ var idCounter int = 100
 type Akun struct {
 	Username string
 	Password string
+	Deposit float64
 }
 
 type Investasi struct {
@@ -75,6 +76,8 @@ func login() {
 	if LoginUsn == akun.Username && LoginPass == akun.Password {
 		isLoggedIn = true
 		fmt.Println("✅ Login berhasil!\n")
+		fmt.Print("Deposit : ")
+		fmt.Scanln(&akun.Deposit)
 	} else {
 		fmt.Println("🚫 Username atau password salah\n")
 	}
@@ -102,7 +105,7 @@ func menuUtama() {
 
 	switch pilihan {
 	case 1:
-		tambahInvestasi(&daftarInvestasi, &nData)
+		tambahInvestasi(&daftarInvestasi, &nData, akun)
 	case 2:
 		tarikInvestasi(&daftarInvestasi, &nData)
 	case 3:
@@ -121,7 +124,7 @@ func menuUtama() {
 	}
 }
 
-func tambahInvestasi(data *[NMAX]Investasi, n *int) {
+func tambahInvestasi(data *[NMAX]Investasi, n *int, akun Akun) {
 	if *n >= NMAX {
 		fmt.Println("🚫 Data investasi penuh!")
 		return
@@ -131,6 +134,7 @@ func tambahInvestasi(data *[NMAX]Investasi, n *int) {
 	var jumlah float64
 	var nama string
 	var hargaSatuan float64
+	var beli float64
 
 	fmt.Println("\n💼 Pilih Jenis Investasi:")
 	fmt.Println("1. Emas (Rp 2.000.000/gram)")
@@ -168,16 +172,23 @@ func tambahInvestasi(data *[NMAX]Investasi, n *int) {
 
 	fmt.Print("Masukkan jumlah (gram/lembar/lot): ")
 	fmt.Scanln(&jumlah)
-
-	data[*n] = Investasi{
-		ID:     idCounter,
-		Nama:   nama,
-		Jumlah: jumlah,
-		Total:  jumlah * hargaSatuan,
+	
+	beli = jumlah * hargaSatuan
+	if beli <= akun.Deposit {
+		data[*n] = Investasi{
+			ID:     idCounter,
+			Nama:   nama,
+			Jumlah: jumlah,
+			Total:  beli,
+		}
+		idCounter++
+		*n++
+		fmt.Println("✅ Investasi berhasil ditambahkan!\n")
+		akun.Deposit = akun.Deposit - beli
+		fmt.Printf("Saldo anda saat ini: %.0f\n", akun.Deposit)
+	} else {
+		fmt.Println("🚫 Investasi gagal, saldo tidak cukup!\n")
 	}
-	idCounter++
-	*n++
-	fmt.Println("✅ Investasi berhasil ditambahkan!\n")
 }
 
 func tarikInvestasi(data *[NMAX]Investasi, n *int) {
