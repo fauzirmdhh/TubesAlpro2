@@ -16,7 +16,7 @@ var idCounter int = 100
 type Akun struct {
 	Username string
 	Password string
-	Deposit float64
+	Deposit  float64
 }
 
 type Investasi struct {
@@ -127,33 +127,45 @@ func menuUtama() {
 	}
 }
 
-func searchById(data *[NMAX]Investasi, n int){
-	var low, mid, high, targetID int
-	var found bool = false
-	high = n-1
-	low = 0
-	fmt.Println("Masukkan ID:")
-	fmt.Print(">> Jawaban Anda: ")
-	fmt.Scan(&targetID)
-	sortByID(data, n)
-		for low <= high{
-			mid = (high + low) / 2
-			if data[mid].ID == targetID {
+func searchById(data *[NMAX]Investasi, n int) {
+	var id, low, high, mid int
+	var found bool
+
+	found = false
+
+	fmt.Print("Masukkan ID yang ingin dicari: ")
+	fmt.Scanln(&id)
+
+	if n > 0 {
+		sortByID(data, n)
+		low = 0
+		high = n - 1
+
+		for low <= high {
+			mid = (low + high) / 2
+			if data[mid].ID == id {
 				found = true
-				break
-			} else if data[mid].ID > targetID{
-				high = mid - 1
-			} else if data[mid].ID < targetID{
+				low = high + 1
+			} else if data[mid].ID < id {
 				low = mid + 1
+			} else {
+				high = mid - 1
 			}
 		}
-		if found == true {
-			fmt.Println("✅Investasi berhasil ditemukan")
+
+		if found {
+			inv := data[mid]
+			fmt.Println("\n✅ Investasi ditemukan:\n")
+			fmt.Printf("%-5s %-10s %-10s %-15s\n", "ID", "Nama", "Jumlah", "Total Harga")
+			fmt.Println(strings.Repeat("-", 45))
+			fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n", inv.ID, inv.Nama, inv.Jumlah, inv.Total)
 			fmt.Println()
-			fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n", data[mid].ID, data[mid].Nama, data[mid].Jumlah, data[mid].Total)
 		} else {
-			fmt.Println("🚫Investasi tidak ditemukan")
+			fmt.Println("🚫 Investasi dengan ID tersebut tidak ditemukan.\n")
 		}
+	} else {
+		fmt.Println("🚫 Belum ada data investasi.\n")
+	}
 }
 
 func tambahInvestasi(data *[NMAX]Investasi, n *int, akun Akun) {
@@ -204,7 +216,7 @@ func tambahInvestasi(data *[NMAX]Investasi, n *int, akun Akun) {
 
 	fmt.Print("Masukkan jumlah (gram/lembar/lot): ")
 	fmt.Scanln(&jumlah)
-	
+
 	beli = jumlah * hargaSatuan
 	if beli <= akun.Deposit {
 		data[*n] = Investasi{
