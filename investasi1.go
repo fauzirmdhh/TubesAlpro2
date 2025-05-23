@@ -99,7 +99,8 @@ func menuUtama() {
 	fmt.Println("4. Urutkan Berdasarkan Harga (Descending)")
 	fmt.Println("5. Urutkan Berdasarkan ID (Ascending)")
 	fmt.Println("6. Lihat Daftar Investasi")
-	fmt.Println("7. Logout")
+	fmt.Println("7. Cari Investasi")
+	fmt.Println("8. Logout")
 	fmt.Print(">> Pilihan Anda: ")
 	fmt.Scanln(&pilihan)
 
@@ -117,11 +118,42 @@ func menuUtama() {
 	case 6:
 		tampilkanInvestasi(&daftarInvestasi, nData)
 	case 7:
+		searchById(&daftarInvestasi, nData)
+	case 8:
 		isLoggedIn = false
 		fmt.Println("🔓 Logout berhasil.\n")
 	default:
 		fmt.Println("🚫 Pilihan tidak valid.\n")
 	}
+}
+
+func searchById(data *[NMAX]Investasi, n int){
+	var low, mid, high, targetID int
+	var found bool = false
+	high = n-1
+	low = 0
+	fmt.Println("Masukkan ID:")
+	fmt.Print(">> Jawaban Anda: ")
+	fmt.Scan(&targetID)
+	sortByID(data, n)
+		for low <= high{
+			mid = (high + low) / 2
+			if data[mid].ID == targetID {
+				found = true
+				break
+			} else if data[mid].ID > targetID{
+				high = mid - 1
+			} else if data[mid].ID < targetID{
+				low = mid + 1
+			}
+		}
+		if found == true {
+			fmt.Println("✅Investasi berhasil ditemukan")
+			fmt.Println()
+			fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n", data[mid].ID, data[mid].Nama, data[mid].Jumlah, data[mid].Total)
+		} else {
+			fmt.Println("🚫Investasi tidak ditemukan")
+		}
 }
 
 func tambahInvestasi(data *[NMAX]Investasi, n *int, akun Akun) {
