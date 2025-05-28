@@ -119,6 +119,8 @@ func menuUtama() {
 		sortByHargaDsc(&daftarInvestasi, nData)
 	case 6:
 		sortByID(&daftarInvestasi, nData)
+		fmt.Println("✅ Investasi berhasil diurutkan berdasarkan ID (terkecil ke terbesar).\n")
+		tampilkanInvestasi(&daftarInvestasi, nData)
 	case 7:
 		cariInvestasiByID(&daftarInvestasi, nData)
 	case 8:
@@ -140,64 +142,77 @@ func tambahInvestasi(data *[NMAX]Investasi, n *int) {
 
 	if *n >= NMAX {
 		fmt.Println("🚫 Data investasi penuh!")
-		return
+	} else {
+		fmt.Println("\n💼 Pilih Jenis Investasi:")
+		fmt.Println("1. Emas (Rp 2.000.000/gram)")
+		fmt.Println("2. Dolar (Rp 16.500/lembar)")
+		fmt.Println("3. Saham BBCA (Rp 900.000/lot)")
+		fmt.Println("4. Saham BMRI (Rp 477.000/lot)")
+		fmt.Println("5. Saham BBRI (Rp 384.000/lot)")
+		fmt.Println("6. Saham TLKM (Rp 260.000/lot)")
+		fmt.Println("7. Saham ASII (Rp 471.000/lot)")
+		fmt.Println("8. Saham GOTO (Rp 670.000/lot)")
+		fmt.Println("9. Reksadana Pasar Uang (Rp 100.000/unit)")
+		fmt.Println("10. Obligasi Ritel Indonesia (Rp 1.000.000/unit)")
+		fmt.Print(">> Pilihan: ")
+		fmt.Scanln(&pilihan)
+
+		switch pilihan {
+		case 1:
+			nama = "Emas"
+			hargaSatuan = 2000000
+		case 2:
+			nama = "Dollar"
+			hargaSatuan = 16500
+		case 3:
+			nama = "BBCA"
+			hargaSatuan = 900000
+		case 4:
+			nama = "BMRI"
+			hargaSatuan = 477000
+		case 5:
+			nama = "BBRI"
+			hargaSatuan = 384000
+		case 6:
+			nama = "TLKM"
+			hargaSatuan = 260000
+		case 7:
+			nama = "ASII"
+			hargaSatuan = 471000
+		case 8:
+			nama = "GOTO"
+			hargaSatuan = 670000
+		case 9:
+			nama = "Reksadana Pasar Uang"
+			hargaSatuan = 100000
+		case 10:
+			nama = "ORI"
+			hargaSatuan = 1000000
+		default:
+			fmt.Println("🚫 Pilihan tidak valid.")
+		}
+
+		fmt.Print("Masukkan jumlah (gram/lembar/lot): ")
+		fmt.Scanln(&jumlah)
+
+		totalHarga = jumlah * hargaSatuan
+		if totalHarga > saldo {
+			fmt.Println("🚫 Saldo tidak cukup untuk melakukan investasi.\n")
+		} else {
+			saldo = saldo - totalHarga
+			fmt.Println("✅ Investasi berhasil ditambahkan!\n")
+		}
+
+		data[*n] = Investasi{
+			ID:     idCounter,
+			Nama:   nama,
+			Jumlah: jumlah,
+			Total:  totalHarga,
+		}
+
+		idCounter++
+		*n++
 	}
-
-	fmt.Println("\n💼 Pilih Jenis Investasi:")
-	fmt.Println("1. Emas (Rp 2.000.000/gram)")
-	fmt.Println("2. Dolar (Rp 16.500/lembar)")
-	fmt.Println("3. Saham BBCA (Rp 900.000/lot)")
-	fmt.Println("4. Saham BMRI (Rp 477.000/lot)")
-	fmt.Println("5. Saham BBRI (Rp 384.000/lot)")
-	fmt.Println("6. Saham TLKM (Rp 260.000/lot)")
-	fmt.Print(">> Pilihan: ")
-	fmt.Scanln(&pilihan)
-
-	switch pilihan {
-	case 1:
-		nama = "Emas"
-		hargaSatuan = 2000000
-	case 2:
-		nama = "Dollar"
-		hargaSatuan = 16500
-	case 3:
-		nama = "BBCA"
-		hargaSatuan = 900000
-	case 4:
-		nama = "BMRI"
-		hargaSatuan = 477000
-	case 5:
-		nama = "BBRI"
-		hargaSatuan = 384000
-	case 6:
-		nama = "TLKM"
-		hargaSatuan = 260000
-	default:
-		fmt.Println("🚫 Pilihan tidak valid.")
-		return
-	}
-
-	fmt.Print("Masukkan jumlah (gram/lembar/lot): ")
-	fmt.Scanln(&jumlah)
-
-	totalHarga = jumlah * hargaSatuan
-	if totalHarga > saldo {
-		fmt.Println("🚫 Saldo tidak cukup untuk melakukan investasi.\n")
-		return
-	}
-
-	data[*n] = Investasi{
-		ID:     idCounter,
-		Nama:   nama,
-		Jumlah: jumlah,
-		Total:  totalHarga,
-	}
-
-	idCounter++
-	saldo -= totalHarga
-	*n++
-	fmt.Println("✅ Investasi berhasil ditambahkan!\n")
-
 }
 
 func tarikInvestasi(data *[NMAX]Investasi, n *int) {
@@ -274,26 +289,25 @@ func sortByID(data *[NMAX]Investasi, n int) {
 		}
 		data[i], data[minIdx] = data[minIdx], data[i]
 	}
-	fmt.Println("✅ Investasi berhasil diurutkan berdasarkan ID (terkecil ke terbesar).\n")
-	tampilkanInvestasi(data, n)
 }
 
 func tampilkanInvestasi(data *[NMAX]Investasi, n int) {
-	tampilkanHeader("Daftar Investasi FinVest")
-	if n == 0 {
-		fmt.Println("Belum ada data investasi.")
-		return
-	}
 	var totalInvestasi float64
 
-	fmt.Printf("%-5s %-10s %-10s %-15s\n", "ID", "Nama", "Jumlah", "Total Harga")
-	fmt.Println(strings.Repeat("-", 45))
-	for i := 0; i < n; i++ {
-		inv := data[i]
-		fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n", inv.ID, inv.Nama, inv.Jumlah, inv.Total)
-		totalInvestasi += inv.Total
+	tampilkanHeader("Daftar Investasi FinVest")
+
+	if n == 0 {
+		fmt.Println("Belum ada data investasi.")
+	} else {
+		fmt.Printf("%-5s %-10s %-10s %-15s\n", "ID", "Nama", "Jumlah", "Total Harga")
+		fmt.Println(strings.Repeat("-", 45))
+		for i := 0; i < n; i++ {
+			inv := data[i]
+			fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n", inv.ID, inv.Nama, inv.Jumlah, inv.Total)
+			totalInvestasi += inv.Total
+		}
+		fmt.Printf("\nTotal Investasi Saat Ini: Rp %.2f\n\n", totalInvestasi)
 	}
-	fmt.Printf("\nTotal Investasi Saat Ini: Rp %.2f\n\n", totalInvestasi)
 }
 
 func depositSaldo() {
@@ -334,14 +348,16 @@ func cariInvestasiByID(data *[NMAX]Investasi, n int) {
 
 		if found {
 			inv := data[mid]
-			fmt.Println("\n✅ Investasi ditemukan:\n")
+			fmt.Println("✅ Investasi ditemukan:\n")
 			fmt.Printf("%-5s %-10s %-10s %-15s\n", "ID", "Nama", "Jumlah", "Total Harga")
 			fmt.Println(strings.Repeat("-", 45))
-			fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f\n", inv.ID, inv.Nama, inv.Jumlah, inv.Total)
+			fmt.Printf("%-5d %-10s %-10.2f Rp %-15.2f", inv.ID, inv.Nama, inv.Jumlah, inv.Total)
 		} else {
 			fmt.Println("🚫 Investasi dengan ID tersebut tidak ditemukan.\n")
 		}
 	} else {
 		fmt.Println("🚫 Belum ada data investasi.\n")
 	}
+
+	fmt.Println()
 }
