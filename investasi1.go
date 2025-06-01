@@ -30,8 +30,11 @@ type Investasi struct {
 
 func main() {
 	var pilihan int
+	var isRunning bool
 
-	for {
+	isRunning = true
+
+	for isRunning {
 		if !isLoggedIn {
 			tampilkanHeader("🟢 FinVest - Aplikasi Investasi Sederhana")
 			fmt.Println("1. Buat Akun")
@@ -47,7 +50,7 @@ func main() {
 				login()
 			case 3:
 				fmt.Println("Terima kasih telah menggunakan FinVest!")
-				return
+				isRunning = false
 			default:
 				fmt.Println("Pilihan tidak valid.\n")
 			}
@@ -58,18 +61,18 @@ func main() {
 }
 
 func buatAkun() {
-	fmt.Println("\n📌 Buat Akun Baru")
+	fmt.Println("\nBuat Akun Baru")
 	fmt.Print("Username: ")
 	fmt.Scanln(&akun.Username)
 	fmt.Print("Password: ")
 	fmt.Scanln(&akun.Password)
-	fmt.Println("✅ Akun berhasil dibuat!\n")
+	fmt.Println("Akun berhasil dibuat!\n")
 }
 
 func login() {
 	var LoginUsn, LoginPass string
 
-	fmt.Println("\n🔐 Login")
+	fmt.Println("\nLogin")
 	fmt.Print("Username: ")
 	fmt.Scanln(&LoginUsn)
 	fmt.Print("Password: ")
@@ -77,9 +80,9 @@ func login() {
 
 	if LoginUsn == akun.Username && LoginPass == akun.Password {
 		isLoggedIn = true
-		fmt.Println("✅ Login berhasil!\n")
+		fmt.Println("Login berhasil!\n")
 	} else {
-		fmt.Println("🚫 Username atau password salah\n")
+		fmt.Println("Username atau password salah\n")
 	}
 }
 
@@ -96,12 +99,12 @@ func menuUtama() {
 	fmt.Printf("Saldo Anda: Rp %.2f\n", saldo)
 	fmt.Println("1. Deposit Saldo")
 	fmt.Println("2. Tambah Investasi")
-	fmt.Println("3. Jual/Tarik Investasi")
+	fmt.Println("3. Lihat Daftar Investasi")
 	fmt.Println("4. Urutkan Berdasarkan Harga (Ascending)")
 	fmt.Println("5. Urutkan Berdasarkan Harga (Descending)")
 	fmt.Println("6. Urutkan Berdasarkan ID (Ascending)")
 	fmt.Println("7. Cari Investasi Berdasarkan ID")
-	fmt.Println("8. Lihat Daftar Investasi")
+	fmt.Println("8. Jual/Tarik Investasi")
 	fmt.Println("9. Logout")
 	fmt.Print(">> Pilihan Anda: ")
 	fmt.Scanln(&pilihan)
@@ -112,7 +115,7 @@ func menuUtama() {
 	case 2:
 		tambahInvestasi(&daftarInvestasi, &nData)
 	case 3:
-		tarikInvestasi(&daftarInvestasi, &nData)
+		tampilkanInvestasi(&daftarInvestasi, nData)
 	case 4:
 		sortByHargaAsc(&daftarInvestasi, nData)
 	case 5:
@@ -123,8 +126,9 @@ func menuUtama() {
 		tampilkanInvestasi(&daftarInvestasi, nData)
 	case 7:
 		cariInvestasiByID(&daftarInvestasi, nData)
+		fmt.Println()
 	case 8:
-		tampilkanInvestasi(&daftarInvestasi, nData)
+		tarikInvestasi(&daftarInvestasi, &nData)
 	case 9:
 		isLoggedIn = false
 		fmt.Println("Logout berhasil.\n")
@@ -192,22 +196,22 @@ func tambahInvestasi(data *[NMAX]Investasi, n *int) {
 			fmt.Println("🚫 Pilihan tidak valid.")
 		}
 
-		fmt.Print("Masukkan jumlah (gram/lembar/lot): ")
+		fmt.Print("Masukkan jumlah (gram/lembar/lot/unit): ")
 		fmt.Scanln(&jumlah)
 
 		totalHarga = jumlah * hargaSatuan
 		if totalHarga > saldo {
 			fmt.Println("🚫 Saldo tidak cukup untuk melakukan investasi.\n")
 		} else {
+			data[*n] = Investasi{
+				ID:     idCounter,
+				Nama:   nama,
+				Jumlah: jumlah,
+				Total:  totalHarga,
+			}
+
 			saldo = saldo - totalHarga
 			fmt.Println("✅ Investasi berhasil ditambahkan!\n")
-		}
-
-		data[*n] = Investasi{
-			ID:     idCounter,
-			Nama:   nama,
-			Jumlah: jumlah,
-			Total:  totalHarga,
 		}
 
 		idCounter++
@@ -217,7 +221,6 @@ func tambahInvestasi(data *[NMAX]Investasi, n *int) {
 
 func tarikInvestasi(data *[NMAX]Investasi, n *int) {
 	var id, i, index, j int
-
 	tampilkanInvestasi(data, *n)
 	fmt.Print("\nMasukkan ID investasi yang ingin ditarik: ")
 	fmt.Scanln(&id)
@@ -243,9 +246,12 @@ func tarikInvestasi(data *[NMAX]Investasi, n *int) {
 	} else {
 		fmt.Println("🚫 ID tidak ditemukan.\n")
 	}
+
+	tampilkanInvestasi(data, *n)
 }
 
 func sortByHargaAsc(data *[NMAX]Investasi, n int) { // Ascending
+	// Selection Sort
 	var i, minIdx, j int
 
 	for i = 0; i < n-1; i++ {
@@ -262,6 +268,7 @@ func sortByHargaAsc(data *[NMAX]Investasi, n int) { // Ascending
 }
 
 func sortByHargaDsc(data *[NMAX]Investasi, n int) { // Descending
+	// Selection Sort
 	var i, maxIdx, j int
 
 	for i = 0; i < n-1; i++ {
@@ -278,6 +285,7 @@ func sortByHargaDsc(data *[NMAX]Investasi, n int) { // Descending
 }
 
 func sortByID(data *[NMAX]Investasi, n int) {
+	// Selection Sort
 	var i, minIdx, j int
 
 	for i = 0; i < n-1; i++ {
@@ -287,7 +295,8 @@ func sortByID(data *[NMAX]Investasi, n int) {
 				minIdx = j
 			}
 		}
-		data[i], data[minIdx] = data[minIdx], data[i]
+		data[i] = data[minIdx]
+		data[minIdx] = data[i]
 	}
 }
 
@@ -324,6 +333,7 @@ func depositSaldo() {
 }
 
 func cariInvestasiByID(data *[NMAX]Investasi, n int) {
+	// Binary Search
 	var id, low, high, mid int
 	var found bool
 
@@ -358,6 +368,4 @@ func cariInvestasiByID(data *[NMAX]Investasi, n int) {
 	} else {
 		fmt.Println("🚫 Belum ada data investasi.\n")
 	}
-
-	fmt.Println()
 }
